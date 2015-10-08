@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h3>Convert IITC drawstring to an intel link</h3>
+
+Copy the drawstring here:<br>
+<textarea id="drawstring" rows="10" cols="100">
+ [{"type":"polyline","latLngs":[{"lat":37.415838,"lng":-120.672754},{"lat":37.51055,"lng":-121.876036}],"color":"#a24ac3"}]
+</textarea>
+
+<button type="button" onclick="toIntel()">Convert</button>
+
+<p id="intel"></p>
+
+<script>
+function toIntel() {
+	var drawstring = '{"drawstring":' + document.getElementById("drawstring").value + '}';
+	var obj = JSON.parse(drawstring);
+
+	document.getElementById("intel").innerHTML = '';
+	var strlines = [];
+	for(i = 0; i < obj.drawstring.length; i++){
+		var lat0 = obj.drawstring[i].latLngs[0].lat;
+		var lng0 = obj.drawstring[i].latLngs[0].lng;
+		var lat1 = obj.drawstring[i].latLngs[1].lat;
+		var lng1 = obj.drawstring[i].latLngs[1].lng;
+		var strline = lat0 + ',' + lng0 + ',' + lat1 + ',' + lng1;
+		strlines.push(strline);
+
+	}
+	var intelurl = 'https://www.ingress.com/intel?ll=' + lat0 + ',' + lng0 + '&z=15&pls=' + strlines.join('_');
+
+	document.getElementById("intel").innerHTML = "<a href='" + intelurl + "'>" + intelurl + "</a>";
+
+}
+</script>
+
+</body>
+</html>
+
